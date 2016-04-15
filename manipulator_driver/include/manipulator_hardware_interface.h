@@ -9,8 +9,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <ros/ros.h>
 #include <math.h>
-#include "do_output.h"
-#include "ur_driver.h"
+#include "RobotisController.h"
 
 namespace ros_control_manipulator {
 
@@ -26,7 +25,7 @@ public:
      * \brief Constructor
      * \param nh - Node handle for topics.
      */
-    UrHardwareInterface(ros::NodeHandle& nh, UrDriver* robot);
+    ManipulatorHardwareInterface(ros::NodeHandle& nh, Robotis::RobotisController* robot);
 
     /// \brief Initialize the hardware interface
     virtual void init();
@@ -63,7 +62,7 @@ protected:
     double max_vel_change_;
 
     // Robot API
-    UrDriver* robot_;
+    Robotis::RobotisController* robot_;
 };
 // class
 
