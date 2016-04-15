@@ -14,6 +14,8 @@ find_package(catkin REQUIRED COMPONENTS
         sensor_msgs
         std_msgs
         trajectory_msgs
+        manipulator_msgs
+        manipulator_actions
         tf
         )
 
@@ -109,7 +111,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
         INCLUDE_DIRS include
         #  LIBRARIES ur_modern_driver
-        CATKIN_DEPENDS hardware_interface controller_manager actionlib control_msgs geometry_msgs roscpp sensor_msgs trajectory_msgs
+        CATKIN_DEPENDS hardware_interface controller_manager actionlib control_msgs geometry_msgs roscpp sensor_msgs trajectory_msgs manipulator_msgs manipulator_actions
        # DEPENDS ur_hardware_interface
 )
 
