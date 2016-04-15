@@ -55,11 +55,11 @@
  Author: Dave Coleman
  */
 
-#include <manipulator_driver/manipulator_hardware_interface.h>
+#include "manipulator_hardware_interface.h"
 
 namespace ros_control_manipulator {
 
-ManipulatorHardwareInterface::ManipulatorHardwareInterface(ros::NodeHandle& nh, UrDriver* robot) :
+ManipulatorHardwareInterface::ManipulatorHardwareInterface(ros::NodeHandle& nh, Robotis::RobotisController* robot) :
         nh_(nh), robot_(robot) {
     // Initialize shared memory and interfaces here
     init(); // this implementation loads from rosparam
