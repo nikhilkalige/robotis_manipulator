@@ -40,61 +40,62 @@ RobotisController::~RobotisController()
 bool RobotisController::initialize()
 {
     bool result = false;
-    int port_num;
 
-    string name;
-    if(!ros::param::get("~serial_port/name", name))
-        ROS_ERROR()
-
-    if(nh_.getParam("port_num", port_num) == false)
+    std::string name;
+    if(!ros::param::get("~arm_config/serial_port/name", name)) {
+        ROS_ERROR("No valid serial port name found");
         exit(-1);
-
-    if(port_num < 1)
-        exit(-1);
-
-    for(int i = 0; i < port_num; i++)
-    {
-        std::stringstream dev_idx;
-        dev_idx << i;
-
-        std::string dev_name;
-        nh_.getParam("serial_ports/dxl_tty"+dev_idx.str()+"/port_name", dev_name);
-
-        int baudrate;
-        nh_.getParam("serial_ports/dxl_tty"+dev_idx.str()+"/baudrate", baudrate);
-
-        result = addSerialPort(dev_name.c_str(), baudrate);
-        if(result == false)
-            return result;
-
-        ROS_INFO("Port [ %s ] added.", dev_name.c_str());
-
-        int dxl_num;
-        nh_.getParam("serial_ports/dxl_tty"+dev_idx.str()+"/dxl_num", dxl_num);
-
-        int cnt = 0;
-        if(dxl_num > 0)
-        {
-            for(int c = 0; c < dxl_num; c++)
-            {
-                int id = 0;
-                double prot_ver = 2.0;
-                std::string model = "";
-                std::string joint_name = "";
-
-                std::stringstream dxl_idx;
-                dxl_idx << c;
-                nh_.getParam("serial_ports/dxl_tty"+dev_idx.str()+"/dxl"+dxl_idx.str()+"/id", id);
-                nh_.getParam("serial_ports/dxl_tty"+dev_idx.str()+"/dxl"+dxl_idx.str()+"/model", model);
-                nh_.getParam("serial_ports/dxl_tty"+dev_idx.str()+"/dxl"+dxl_idx.str()+"/protocol", prot_ver);
-                nh_.getParam("serial_ports/dxl_tty"+dev_idx.str()+"/dxl"+dxl_idx.str()+"/joint_name", joint_name);
-
-                addDevice(portList.back(), id, joint_name.c_str(), model.c_str(), (float)prot_ver);
-                ROS_INFO("  -Device added (total:%3d) - [ID:%03d] %s", ++cnt, id, joint_name.c_str());
-            }
-        }
     }
-    return result;
+
+    int baudrate = 1000000;
+    ros::param::get("~arm_config/serial_port/baudrate", baudrate);
+    ROS_INFO("Opening port \"%s\" with baudrate \"%d\"", name.c_str(), baudrate);
+
+    int device_count = 0;
+    ros::param::get("~arm_config/count", device_count);
+    if(device_count == 0) {
+        ROS_ERROR("Invalid device count");
+        exit(-1);
+    }
+    ROS_INFO("Device Count: %d", device_count);
+
+    if(!addSerialPort(name.c_str(), baudrate)) {
+        ROS_ERROR("Unable to open serial port");
+        exit(-1);
+    }
+
+    ROS_INFO("Initializing the servos");
+
+    XmlRpc::XmlRpcValue servos;
+    if(!ros::param::get("~arm_config/devices", servos)) {
+        ROS_ERROR("No valid config found for the servos");
+        exit(-1);
+    }
+    if(servos.getType() != XmlRpc::XmlRpcValue::TypeArray) {
+        ROS_ERROR("Invalid yaml file loaded");
+        exit(-1);
+    }
+    for (int i = 0; i < servos.size(); ++i) {
+        XmlRpc::XmlRpcValue servo;
+        int id = 0;
+        double prot_ver = 2.0;
+        std::string model = "";
+        std::string joint_name = "";
+
+        servo = servos[i];
+        id = servo["id"];
+        prot_ver = servo["protocol"];
+        model = servo["model"];
+        joint_name = servo["joint_name"];
+        if((id == 0) || (model == "") || (joint_name == "")) {
+            ROS_ERROR("Invalid Servo Config");
+            exit(-1);
+        }
+
+        addDevice(portList.back(), id, joint_name.c_str(), model.c_str(), (float)prot_ver);
+        ROS_INFO("Servo: %d, ID: %d, Model: %s, Ver: %f, Joint: %s added", i, id, model, prot_ver, joint_name);
+    }
+    return true;
 }
 
 bool RobotisController::addSerialPort(const char* port_name, int baudrate)
