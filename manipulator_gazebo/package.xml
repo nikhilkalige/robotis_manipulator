@@ -6,6 +6,9 @@
       Gazebo wrapper for the Universal UR5/10 robot arms.
   </description>
 
+  <author email="nikhilkalige@gmail.com">Nikhil Kalige</author>
+  <maintainer email="nikhilkalige@gmail.com">Nikhil Kalige</maintainer>
+
   <license>BSD</license>
 
   <buildtool_depend>catkin</buildtool_depend>
