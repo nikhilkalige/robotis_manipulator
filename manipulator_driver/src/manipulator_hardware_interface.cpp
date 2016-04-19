@@ -59,7 +59,7 @@
 
 namespace ros_control_manipulator {
 
-ManipulatorHardwareInterface::ManipulatorHardwareInterface(ros::NodeHandle& nh, Robotis::RobotisController* robot) :
+ManipulatorHardwareInterface::ManipulatorHardwareInterface(ros::NodeHandle& nh, ManipulatorDriver* robot) :
         nh_(nh), robot_(robot) {
     // Initialize shared memory and interfaces here
     init(); // this implementation loads from rosparam
@@ -111,46 +111,17 @@ void ManipulatorHardwareInterface::init() {
 }
 
 void ManipulatorHardwareInterface::read() {
-    std::vector<double> pos, vel, current, tcp;
-    pos = robot_->rt_interface_->robot_state_->getQActual();
-    vel = robot_->rt_interface_->robot_state_->getQdActual();
-    current = robot_->rt_interface_->robot_state_->getIActual();
-    tcp = robot_->rt_interface_->robot_state_->getTcpForce();
-    for (std::size_t i = 0; i < num_joints_; ++i) {
+    std::vector<double> pos;
+    pos = robot_->read();
+    for (int i = 0; i < num_joints_; ++i) {
         joint_position_[i] = pos[i];
-        joint_velocity_[i] = vel[i];
-        joint_effort_[i] = current[i];
+        joint_velocity_[i] = 0;
+        joint_effort_[i] = 0;
     }
-    for (std::size_t i = 0; i < 3; ++i) {
-        robot_force_[i] = tcp[i];
-        robot_torque_[i] = tcp[i + 3];
-    }
-
-}
-
-void ManipulatorHardwareInterface::setMaxVelChange(double inp) {
-    max_vel_change_ = inp;
 }
 
 void ManipulatorHardwareInterface::write() {
-    if (velocity_interface_running_) {
-        std::vector<double> cmd;
-        //do some rate limiting
-        cmd.resize(joint_velocity_command_.size());
-        for (unsigned int i = 0; i < joint_velocity_command_.size(); i++) {
-            cmd[i] = joint_velocity_command_[i];
-            if (cmd[i] > prev_joint_velocity_command_[i] + max_vel_change_) {
-                cmd[i] = prev_joint_velocity_command_[i] + max_vel_change_;
-            } else if (cmd[i]
-                    < prev_joint_velocity_command_[i] - max_vel_change_) {
-                cmd[i] = prev_joint_velocity_command_[i] - max_vel_change_;
-            }
-            prev_joint_velocity_command_[i] = cmd[i];
-        }
-        robot_->setSpeed(cmd[0], cmd[1], cmd[2], cmd[3], cmd[4], cmd[5],  max_vel_change_*125);
-    } else if (position_interface_running_) {
-        robot_->servoj(joint_position_command_);
-    }
+    robot_->write_position(joint_position_command_);
 }
 
 } // namespace

@@ -161,7 +161,8 @@ set(${PROJECT_NAME}_SOURCES
         src/handler/PacketProtocol2.cpp
         src/handler/PortHandler.cpp
         src/device/GenericDevice.cpp
-        )
+        src/robot_state.cpp
+        src/manipulator_driver.cpp)
 add_executable(manipulator_driver ${${PROJECT_NAME}_SOURCES})
 
 ## Add cmake target dependencies of the executable

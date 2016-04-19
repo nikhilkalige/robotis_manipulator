@@ -27,6 +27,7 @@
 
 #include "device/GenericDevice.h"
 #include "handler/PacketHandler.h"
+#include <ros/ros.h>
 
 namespace Robotis
 {

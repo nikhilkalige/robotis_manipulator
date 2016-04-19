@@ -79,21 +79,21 @@ bool RobotisController::initialize()
         XmlRpc::XmlRpcValue servo;
         int id = 0;
         double prot_ver = 2.0;
-        std::string model = "";
-        std::string joint_name = "";
+        /*std::string model = "";
+        std::string joint_name = "";*/
 
         servo = servos[i];
         id = servo["id"];
         prot_ver = servo["protocol"];
-        model = servo["model"];
-        joint_name = servo["joint_name"];
+        std::string model = servo["model"];
+        std::string joint_name = servo["joint_name"];
         if((id == 0) || (model == "") || (joint_name == "")) {
             ROS_ERROR("Invalid Servo Config");
             exit(-1);
         }
 
         addDevice(portList.back(), id, joint_name.c_str(), model.c_str(), (float)prot_ver);
-        ROS_INFO("Servo: %d, ID: %d, Model: %s, Ver: %f, Joint: %s added", i, id, model, prot_ver, joint_name);
+        ROS_INFO("Servo: %d, ID: %d, Model: %s, Ver: %f, Joint: %s added", i, id, model.c_str(), prot_ver, joint_name.c_str());
     }
     return true;
 }
