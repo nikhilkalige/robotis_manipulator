@@ -25,9 +25,8 @@
 
 using namespace Robotis;
 
-RobotisController::RobotisController(ros::NodeHandle& nh)
+RobotisController::RobotisController(ros::NodeHandle& nh) : nh_(nh)
 {
-    nh_ = nh;
     packetHandlerList.push_back(PacketHandler::getPacketHandler(1.0));
     packetHandlerList.push_back(PacketHandler::getPacketHandler(2.0));
 }
@@ -44,7 +43,7 @@ bool RobotisController::initialize()
     std::string name;
     if(!ros::param::get("~arm_config/serial_port/name", name)) {
         ROS_ERROR("No valid serial port name found");
-        exit(-1);
+        return false;
     }
 
     int baudrate = 1000000;
@@ -55,13 +54,13 @@ bool RobotisController::initialize()
     ros::param::get("~arm_config/count", device_count);
     if(device_count == 0) {
         ROS_ERROR("Invalid device count");
-        exit(-1);
+        return false;
     }
     ROS_INFO("Device Count: %d", device_count);
 
     if(!addSerialPort(name.c_str(), baudrate)) {
         ROS_ERROR("Unable to open serial port");
-        exit(-1);
+        return false;
     }
 
     ROS_INFO("Initializing the servos");
@@ -69,11 +68,11 @@ bool RobotisController::initialize()
     XmlRpc::XmlRpcValue servos;
     if(!ros::param::get("~arm_config/devices", servos)) {
         ROS_ERROR("No valid config found for the servos");
-        exit(-1);
+        return false;
     }
     if(servos.getType() != XmlRpc::XmlRpcValue::TypeArray) {
         ROS_ERROR("Invalid yaml file loaded");
-        exit(-1);
+        return false;
     }
     for (int i = 0; i < servos.size(); ++i) {
         XmlRpc::XmlRpcValue servo;
@@ -89,7 +88,7 @@ bool RobotisController::initialize()
         std::string joint_name = servo["joint_name"];
         if((id == 0) || (model == "") || (joint_name == "")) {
             ROS_ERROR("Invalid Servo Config");
-            exit(-1);
+            return false;
         }
 
         addDevice(portList.back(), id, joint_name.c_str(), model.c_str(), (float)prot_ver);
