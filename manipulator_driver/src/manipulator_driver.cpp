@@ -3,7 +3,6 @@
 //
 
 #include "manipulator_driver.h"
-#include "device/GenericDevice.h"
 
 ManipulatorDriver::ManipulatorDriver(Robotis::RobotisController* controller, Robotis::GroupHandler* group_handler) {
     controller_ = controller;
@@ -18,15 +17,25 @@ std::vector<double> ManipulatorDriver::read() {
     grp_handler_->runBulkRead();
     com_lock_.unlock();
 
+    // std::cout << "\033[2J\033[1;1H";
+
     for (int i = 0; i < controller_->idList.size(); ++i) {
         int id = controller_->idList[i];
-        int position = 0;
-        if(!grp_handler_->getReadData(id, controller_->getDevice(id)->ADDR_PRESENT_POSITION, (long int*)&position)) {
+        long int position = 0;
+        if(!grp_handler_->getReadData(id, controller_->getDevice(id)->ADDR_PRESENT_POSITION, &position)) {
             ROS_WARN("Unable to read position for %s", controller_->getDevice(id)->getJointName());
             joint_states.clear();
             break;
         }
-        joint_states.push_back(controller_->getDevice(id)->value2Rad(position));
+        double radian;
+        radian = controller_->getDevice(id)->value2Rad((int)position);
+        joint_states.push_back(radian);
+
+        /*
+        degree = realrad * 180 / 3.14159265;
+        printf("Motor: %d Position: %#x, %#x, Radian: %f, Degree: %f\n", i, (int)position >> 16, (int)position, realrad, degree);
+        printf("Motor: %d Position: %d, Radian: %f\n", i,  (int)position, radian);
+        */
     }
     return joint_states;
 }
