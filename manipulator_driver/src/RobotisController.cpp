@@ -39,19 +39,22 @@ RobotisController::~RobotisController()
 bool RobotisController::initialize()
 {
     bool result = false;
+    std::string node_namespace = "";
+    // std::string namespace = "/leftarm/";
 
     std::string name;
-    if(!ros::param::get("~arm_config/serial_port/name", name)) {
+    if(!ros::param::get("serial_port/name", name)) {
         ROS_ERROR("No valid serial port name found");
         return false;
     }
+    //name = "/dev/ttyUSB";
 
     int baudrate = 1000000;
-    ros::param::get("~arm_config/serial_port/baudrate", baudrate);
+    ros::param::get("serial_port/baudrate", baudrate);
     ROS_INFO("Opening port \"%s\" with baudrate \"%d\"", name.c_str(), baudrate);
 
     int device_count = 0;
-    ros::param::get("~arm_config/count", device_count);
+    ros::param::get("arm_config/count", device_count);
     if(device_count == 0) {
         ROS_ERROR("Invalid device count");
         return false;
@@ -66,7 +69,7 @@ bool RobotisController::initialize()
     ROS_INFO("Initializing the servos");
 
     XmlRpc::XmlRpcValue servos;
-    if(!ros::param::get("~arm_config/devices", servos)) {
+    if(!ros::param::get("arm_config/devices", servos)) {
         ROS_ERROR("No valid config found for the servos");
         return false;
     }
