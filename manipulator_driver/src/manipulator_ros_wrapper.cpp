@@ -29,11 +29,12 @@
 
 class RosWrapper {
 protected:
+    ros::NodeHandle nh_;
+
     Robotis::RobotisController controller_;
     Robotis::GroupHandler grp_handler_;
-    ManipulatorDriver driver_;
 
-    ros::NodeHandle nh_;
+    ManipulatorDriver driver_;
 
     boost::shared_ptr<ros_control_manipulator::ManipulatorHardwareInterface> hardware_interface_;
     boost::shared_ptr<controller_manager::ControllerManager> controller_manager_;
@@ -77,6 +78,8 @@ public:
         controller_manager_.reset(
                 new controller_manager::ControllerManager(
                         hardware_interface_.get(), nh_));
+
+        control_torque_as_.start();
         ros_control_thread_ = new std::thread(
                 boost::bind(&RosWrapper::rosControlLoop, this));
         ROS_DEBUG("The control thread for this driver has been started");
@@ -101,6 +104,7 @@ private:
         struct timespec last_time, current_time;
         static const double BILLION = 1000000000.0;
 
+        ROS_INFO("Starting the control loop");
         clock_gettime(CLOCK_MONOTONIC, &last_time);
         while (ros::ok()) {
             clock_gettime(CLOCK_MONOTONIC, &current_time);
