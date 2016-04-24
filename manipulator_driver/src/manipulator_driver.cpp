@@ -32,9 +32,9 @@ std::vector<double> ManipulatorDriver::read() {
         joint_states.push_back(radian);
 
         /*
-        degree = realrad * 180 / 3.14159265;
+        double degree = radian * 180 / 3.14159265;
+        printf("Motor: %d Position: %d, Radian: %f, Degree: %f\n", i,  (int)position, radian, degree);
         printf("Motor: %d Position: %#x, %#x, Radian: %f, Degree: %f\n", i, (int)position >> 16, (int)position, realrad, degree);
-        printf("Motor: %d Position: %d, Radian: %f\n", i,  (int)position, radian);
         */
     }
     return joint_states;
@@ -49,6 +49,13 @@ void ManipulatorDriver::write(int addr, int data_length, std::vector<unsigned ch
 void ManipulatorDriver::write_position(std::vector<double> positions) {
     int addr, length, n = 0;
     std::vector<unsigned char> data;
+    if(positions[0] == 0) {
+        return;
+    }
+
+    // printf("%f %f %f %f %f %f\n",positions[0], positions[1], positions[2],\
+    //  positions[3], positions[4], positions[5]);
+
     for (int i = 0; i < positions.size(); ++i) {
         int id = controller_->idList[i];
         Robotis::GenericDevice* device = controller_->getDevice(id);
