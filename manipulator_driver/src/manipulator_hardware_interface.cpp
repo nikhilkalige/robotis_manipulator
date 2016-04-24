@@ -124,5 +124,15 @@ void ManipulatorHardwareInterface::write() {
     robot_->write_position(joint_position_command_);
 }
 
+void ManipulatorHardwareInterface::hold() {
+    std::vector<double> pos;
+    while(pos.empty())
+        pos = robot_->read();
+
+    for (int i = 0; i < num_joints_; ++i) {
+        joint_position_command_[i] = pos[i];
+    }
+}
+
 } // namespace
 

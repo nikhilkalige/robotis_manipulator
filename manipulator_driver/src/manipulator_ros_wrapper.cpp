@@ -107,6 +107,7 @@ private:
         struct timespec last_time, current_time;
         static const double BILLION = 1000000000.0;
 
+        hardware_interface_->hold();
         ROS_INFO("Starting the control loop");
         clock_gettime(CLOCK_MONOTONIC, &last_time);
         while (ros::ok()) {

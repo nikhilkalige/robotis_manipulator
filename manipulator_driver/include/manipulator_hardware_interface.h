@@ -37,6 +37,9 @@ public:
     /// \brief write the command to the robot hardware.
     virtual void write();
 
+    /// \brief initialize the command variable until the controller starts
+    virtual void hold();
+
 protected:
 
     // Startup and shutdown of the internal node inside a roscpp program
