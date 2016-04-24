@@ -57,6 +57,9 @@ public:
         std::vector<std::string> joint_names;
         char buf[256];
 
+        std::string ns = ros::this_node::getNamespace();
+        ROS_INFO("Running with namespace - %s", ns.c_str());
+
         if (ros::param::get("~prefix", joint_prefix)) {
             if (joint_prefix.length() > 0) {
                 ROS_INFO("Setting prefix to %s", joint_prefix.c_str());
