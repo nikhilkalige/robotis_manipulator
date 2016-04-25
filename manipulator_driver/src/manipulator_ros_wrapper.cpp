@@ -109,6 +109,7 @@ private:
 
         hardware_interface_->hold();
         ROS_INFO("Starting the control loop");
+
         clock_gettime(CLOCK_MONOTONIC, &last_time);
         while (ros::ok()) {
             clock_gettime(CLOCK_MONOTONIC, &current_time);
@@ -120,9 +121,7 @@ private:
             // Input
             hardware_interface_->read();
             // Control
-            controller_manager_->update(
-                    ros::Time(current_time.tv_sec, current_time.tv_nsec),
-                    elapsed_time);
+            controller_manager_->update(ros::Time::now(), elapsed_time);
             // Output
             hardware_interface_->write();
         }
