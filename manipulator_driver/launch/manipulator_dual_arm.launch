@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+  Universal robot ur5 launch.  Loads ur5 robot description (see ur_common.launch
+  for more info)
+
+  Usage:
+    ur5_bringup.launch robot_ip:=<value>
+-->
+<launch>
+  <!-- left common -->
+  <include file="$(find manipulator_driver)/launch/manipulator_left_arm.launch">
+  </include>
+
+  <!-- right common -->
+  <include file="$(find manipulator_driver)/launch/manipulator_right_arm.launch">
+  </include>
+</launch>
