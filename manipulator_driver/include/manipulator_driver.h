@@ -40,9 +40,12 @@ public:
 
     ManipulatorDriver(Robotis::RobotisController* controller, Robotis::GroupHandler* group_handler);
     bool start();
-    std::vector<double> read();
+    void initiate_read();
+    std::vector<double> get_position();
+    std::vector<double> get_velocity();
     void write(int addr, int data_length, std::vector<unsigned char> param);
     void write_position(std::vector<double> positions);
+    void write_velocity(std::vector<double> velocities);
 };
 
 #endif /* MANIPULATOR_DRIVER_H_ */
