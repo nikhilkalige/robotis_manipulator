@@ -30,7 +30,7 @@
 class RosWrapper {
 protected:
     ros::NodeHandle nh_;
-
+    std::mutex com_lock_;
     Robotis::RobotisController controller_;
     Robotis::GroupHandler grp_handler_;
 
@@ -49,7 +49,7 @@ public:
     RosWrapper() :
             controller_(nh_),
             grp_handler_(&controller_),
-            driver_(&controller_, &grp_handler_),
+            driver_(&controller_, &grp_handler_, &com_lock_),
             control_torque_as_(nh_, "control_torque", boost::bind(&RosWrapper::ControlTorqueExecuteCB, this, _1),
                                false) {
         // Get the joint angles

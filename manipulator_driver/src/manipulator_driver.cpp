@@ -4,16 +4,16 @@
 
 #include "manipulator_driver.h"
 
-ManipulatorDriver::ManipulatorDriver(Robotis::RobotisController* controller, Robotis::GroupHandler* group_handler) {
+ManipulatorDriver::ManipulatorDriver(Robotis::RobotisController* controller, Robotis::GroupHandler* group_handler, std::mutex* com_mutex) {
     controller_ = controller;
     grp_handler_ = group_handler;
-   // com_lock_ = &lock;
+    com_lock_ = com_mutex;
 }
 
 void ManipulatorDriver::initiate_read() {
-    com_lock_.lock();
+    com_lock_->lock();
     grp_handler_->runBulkRead();
-    com_lock_.unlock();
+    com_lock_->unlock();
 }
 
 std::vector<double> ManipulatorDriver::get_position() {
@@ -70,9 +70,9 @@ std::vector<double> ManipulatorDriver::get_velocity() {
 }
 
 void ManipulatorDriver::write(int addr, int data_length, std::vector<unsigned char> param) {
-    com_lock_.lock();
+    com_lock_->lock();
     grp_handler_->syncWrite(addr, data_length, &param[0], (int)param.size());
-    com_lock_.unlock();
+    com_lock_->unlock();
 }
 
 void ManipulatorDriver::write_position(std::vector<double> positions) {

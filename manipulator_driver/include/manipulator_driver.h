@@ -36,9 +36,9 @@ class ManipulatorDriver {
 public:
     Robotis::RobotisController* controller_;
     Robotis::GroupHandler* grp_handler_;
-    std::mutex com_lock_;
+    std::mutex* com_lock_;
 
-    ManipulatorDriver(Robotis::RobotisController* controller, Robotis::GroupHandler* group_handler);
+    ManipulatorDriver(Robotis::RobotisController* controller, Robotis::GroupHandler* group_handler, std::mutex* com_mutex);
     bool start();
     void initiate_read();
     std::vector<double> get_position();
