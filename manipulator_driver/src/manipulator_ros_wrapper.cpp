@@ -22,10 +22,46 @@
 #include "manipulator_hardware_interface.h"
 
 #include "manipulator_actions/ControlTorqueAction.h"
+#include "manipulator_actions/ControlTableAction.h"
+
+#include "manipulator_msgs/KeyValue.h"
 #include "manipulator_driver.h"
 #include <tf/tf.h>
 #include <tf/transform_broadcaster.h>
 
+// Hold all the address values that are retrieved during the controltable action
+static std::map<std::string, int> table_addr = {
+    {"BaudRate", 8},
+    {"Return Delay Time", 9},
+    {"Operating Mode", 11},
+    {"Homing Offset", 13},
+    {"Moving Threshold", 17},
+    {"Temperature Limit", 21},
+    {"Max Voltage Limit", 22},
+    {"Min Voltage Limit", 24},
+    {"Acceleration Limit", 26},
+    {"Torque limit", 30},
+    {"Velocity Limit", 32},
+    {"Max Position Limit", 36},
+    {"Min Position Limit", 40},
+    {"Torque Enable", 562},
+    {"LED Red", 563},
+    {"LED Green", 564},
+    {"LED Blue", 565},
+    {"Velocity I Gain", 586},
+    {"Velocity P Gain", 588},
+    {"Position P Gain", 594},
+    {"Goal Position", 596},
+    {"Goal Velocity", 600},
+    {"Goal Torque", 604},
+    {"Goal Acceleration", 606},
+    {"Moving", 610},
+    {"Present Position", 611},
+    {"Present Velocity", 615},
+    {"Present Current", 621},
+    {"Present Input Voltage", 623},
+    {"Present Temperature", 625}
+};
 
 class RosWrapper {
 protected:
@@ -43,6 +79,9 @@ protected:
     actionlib::SimpleActionServer<manipulator_actions::ControlTorqueAction> control_torque_as_;
     manipulator_actions::ControlTorqueResult control_torque_result_;
 
+    actionlib::SimpleActionServer<manipulator_actions::ControlTableAction> control_table_as_;
+    manipulator_actions::ControlTableResult control_table_result_;
+
     std::thread *ros_control_thread_;
 
 public:
@@ -51,6 +90,8 @@ public:
             grp_handler_(&controller_),
             driver_(&controller_, &grp_handler_, &com_lock_),
             control_torque_as_(nh_, "control_torque", boost::bind(&RosWrapper::ControlTorqueExecuteCB, this, _1),
+                               false),
+            control_table_as_(nh_, "control_table", boost::bind(&RosWrapper::ControlTableExecuteCB, this, _1),
                                false) {
         // Get the joint angles
         std::string joint_prefix = "";
@@ -83,6 +124,7 @@ public:
                         hardware_interface_.get(), nh_));
 
         control_torque_as_.start();
+        control_table_as_.start();
         ros_control_thread_ = new std::thread(
                 boost::bind(&RosWrapper::rosControlLoop, this));
         ROS_DEBUG("The control thread for this driver has been started");
@@ -164,6 +206,45 @@ private:
         driver_.write(addr, length, param);
         control_torque_result_.success = true;
         control_torque_as_.setSucceeded(control_torque_result_);
+    }
+
+    void ControlTableExecuteCB(const manipulator_actions::ControlTableGoalConstPtr &goal) {
+        // Validate the message
+        if (goal->joint_names.size() == 0) {
+            ROS_INFO("ControlTable Action Failed: Invalid Message");
+            control_table_result_.success = false;
+            control_table_as_.setAborted(control_table_result_);
+            return;
+        }
+
+        std::vector<int> motor_ids;
+        for (int i = 0; i < goal->joint_names.size(); i++) {
+            int id = get_id_from_name(goal->joint_names[i]);
+            motor_ids.push_back(id);
+        }
+
+        if(motor_ids.size() == 0) {
+            ROS_INFO("ControlTable Action Failed: Invalid Message");
+            control_table_result_.success = false;
+            control_table_as_.setAborted(control_table_result_);
+            return;
+        }
+
+        control_table_result_.table.clear();
+        com_lock_.lock();
+        for (std::map<std::string, int>::iterator it = table_addr.begin(); it != table_addr.end(); ++it) {
+            manipulator_msgs::KeyValue row;
+            row.key = it->first;
+            for (int i = 0; i < motor_ids.size(); ++i) {
+                long value;
+                controller_.read(motor_ids[i], it->second, &value);
+                row.values.push_back((int)value);
+            }
+            control_table_result_.table.push_back(row);
+        }
+        com_lock_.unlock();
+        control_table_result_.success = true;
+        control_table_as_.setSucceeded(control_table_result_);
     }
 };
 
