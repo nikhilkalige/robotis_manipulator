@@ -130,7 +130,8 @@ private:
     void addGroupRead() {
         for (int i = 0; i < controller_.idList.size(); ++i) {
             int id = controller_.idList[i];
-            grp_handler_.pushBulkRead(id, controller_.getDevice(id)->ADDR_PRESENT_POSITION);
+            // Use length 8 - position(4) + velocity(4)
+            grp_handler_.pushBulkRead(id, controller_.getDevice(id)->ADDR_PRESENT_POSITION, 8);
         }
     }
 
