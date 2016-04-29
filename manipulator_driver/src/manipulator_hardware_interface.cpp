@@ -87,6 +87,7 @@ void ManipulatorHardwareInterface::init() {
     joint_velocity_.resize(num_joints_);
     joint_effort_.resize(num_joints_);
     joint_position_command_.resize(num_joints_);
+    joint_velocity_command_.resize(num_joints_);
 
     // Initialize controller
     for (std::size_t i = 0; i < num_joints_; ++i) {
@@ -100,22 +101,26 @@ void ManipulatorHardwareInterface::init() {
                         &joint_effort_[i]));
 
         // Create position joint interface
-        position_joint_interface_.registerHandle(
-                hardware_interface::JointHandle(
+        pos_vel_joint_interface_.registerHandle(
+                hardware_interface::PosVelJointHandle(
                         joint_state_interface_.getHandle(joint_names_[i]),
-                        &joint_position_command_[i]));
+                        &joint_position_command_[i], &joint_velocity_command_[i]));
     }
 
     registerInterface(&joint_state_interface_); // From RobotHW base class.
-    registerInterface(&position_joint_interface_); // From RobotHW base class.
+    registerInterface(&pos_vel_joint_interface_); // From RobotHW base class.
 }
 
 void ManipulatorHardwareInterface::read() {
-    std::vector<double> pos;
-    pos = robot_->read();
+    std::vector<double> pos, vel;
+    robot_->initiate_read();
+    pos = robot_->get_position();
+    vel = robot_->get_velocity();
+    if ((vel.size() != num_joints_) || (pos.size() != num_joints_))
+        return;
     for (int i = 0; i < num_joints_; ++i) {
         joint_position_[i] = pos[i];
-        joint_velocity_[i] = 0;
+        joint_velocity_[i] = vel[i];
         joint_effort_[i] = 0;
     }
 }
@@ -125,12 +130,16 @@ void ManipulatorHardwareInterface::write() {
 }
 
 void ManipulatorHardwareInterface::hold() {
-    std::vector<double> pos;
-    while(pos.empty())
-        pos = robot_->read();
+    std::vector<double> pos, vel;
+    while(pos.empty()) {
+        robot_->initiate_read();
+        pos = robot_->get_position();
+    }
+    vel = robot_->get_velocity();
 
     for (int i = 0; i < num_joints_; ++i) {
         joint_position_command_[i] = pos[i];
+        joint_velocity_command_[i] = vel[i];
     }
 }
 
