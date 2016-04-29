@@ -8,6 +8,7 @@ add_message_files(
     ControlWrite.msg
     ControlTorque.msg
     PublishPosition.msg
+    KeyValue.msg
 )
 
 
