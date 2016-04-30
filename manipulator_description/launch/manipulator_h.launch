@@ -2,5 +2,5 @@
 <launch>
   <arg name="limited" default="false"/>
 
-  <param unless="$(arg limited)" name="robot_description" command="$(find xacro)/xacro.py '$(find manipulator_description)/urdf/manipulator_h_robot.xacro'" />
+  <param unless="$(arg limited)" name="robot_description" command="$(find xacro)/xacro.py '$(find manipulator_description)/urdf/manipulator_h_arm.xacro'" />
 </launch>

@@ -8,7 +8,7 @@
   <link name="world" />
 
   <!-- arm -->
-  <xacro:manipulator_h_robot prefix="" parent="world" joint_limited="false">
+  <xacro:manipulator_h_arm prefix="" parent="world" joint_limited="false">
     <origin xyz="0 0 0" rpy="0 0 0" />
-  </xacro:manipulator_h_robot>
+  </xacro:manipulator_h_arm>
 </robot>

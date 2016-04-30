@@ -10,7 +10,7 @@
   <!-- gazebo related stuff -->
   <xacro:include filename="$(find manipulator_description)/urdf/common.xacro" />
 
-  <xacro:macro name="manipulator_h_robot" params="prefix joint_limited parent *origin">
+  <xacro:macro name="manipulator_h_arm" params="prefix joint_limited parent *origin">
 
     <!-- First element of the arm fixed to the parent -->
     <joint name="${parent}_${prefix}_base_joint" type="fixed">
