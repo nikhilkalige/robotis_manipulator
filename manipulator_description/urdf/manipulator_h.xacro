@@ -7,7 +7,7 @@
 
   <xacro:property name="pi" value="3.141592654" />
 
-  <xacro:macro name="manipulator_h_robot" params="prefix joint_limited">
+  <xacro:macro name="manipulator_h_robot" params="prefix joint_limited parent *origin">
     <!-- Used for fixing robot to Gazebo 'link 1' -->
     <!-- <link name="${prefix}base_link" >
     </link>
@@ -16,6 +16,13 @@
       <parent link="${prefix}base_link"/>
       <child link="${prefix}shoulder_link"/>
     </joint> -->
+
+    <!-- First element of the arm fixed to the parent -->
+    <joint name="${parent}_${prefix}_base_joint" type="fixed">
+      <insert_block name="origin" />
+      <parent link="${parent}" />
+      <child link="${prefix}shoulder_link" />
+    </joint>
 
     <!-- link 1 -->
     <link name="${prefix}shoulder_link">
