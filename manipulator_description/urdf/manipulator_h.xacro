@@ -14,7 +14,7 @@
 
     <!-- First element of the arm fixed to the parent -->
     <joint name="${parent}_${prefix}_base_joint" type="fixed">
-      <insert_block name="origin" />
+      <xacro:insert_block name="origin" />
       <parent link="${parent}" />
       <child link="${prefix}shoulder_link" />
     </joint>
