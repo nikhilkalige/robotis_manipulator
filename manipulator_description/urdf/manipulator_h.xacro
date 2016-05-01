@@ -6,21 +6,28 @@
   <xacro:include filename="$(find manipulator_description)/urdf/materials.xacro" />
 
   <xacro:property name="pi" value="3.141592654" />
-
+  <xacro:property name="prefix_val" value="" />
   <!-- gazebo related stuff -->
   <xacro:include filename="$(find manipulator_description)/urdf/common.xacro" />
 
   <xacro:macro name="manipulator_h_arm" params="prefix joint_limited parent *origin">
 
+    <!-- Suffix prefix with underscore -->
+    <xacro:if value="${prefix.__len__()}">
+      <xacro:property name="prefix_val" value="${prefix + '_'}" />
+    </xacro:if>
+
+    <xacro:manipulator_arm_gazebo prefix="${prefix}" prefix_val="${prefix_val}" />
+
     <!-- First element of the arm fixed to the parent -->
-    <joint name="${parent}_${prefix}_base_joint" type="fixed">
+    <joint name="${parent}_${prefix_val}_base_joint" type="fixed">
       <xacro:insert_block name="origin" />
       <parent link="${parent}" />
-      <child link="${prefix}shoulder_link" />
+      <child link="${prefix_val}shoulder_link" />
     </joint>
 
     <!-- link 1 -->
-    <link name="${prefix}shoulder_link">
+    <link name="${prefix_val}shoulder_link">
       <collision>
         <origin xyz="0 0 0.063" rpy="0 0 ${pi}"/>
         <geometry>
@@ -46,9 +53,9 @@
     </link>
 
     <!-- Joint 1 -->
-    <joint name="${prefix}shoulder_pan_joint" type="revolute">
-      <parent link="${prefix}shoulder_link" />
-      <child link = "${prefix}upper_arm_link" />
+    <joint name="${prefix_val}shoulder_pan_joint" type="revolute">
+      <parent link="${prefix_val}shoulder_link" />
+      <child link = "${prefix_val}upper_arm_link" />
       <origin xyz="0 0 0.126" rpy="0 0 0"/>
       <axis xyz="0 0 1"/>
       <limit velocity="6.5" effort="1000" lower="${-pi*0.6}" upper="${pi*0.6}" />
@@ -56,7 +63,7 @@
     </joint>
 
     <!-- link 2 -->
-    <link name="${prefix}upper_arm_link">
+    <link name="${prefix_val}upper_arm_link">
       <collision>
         <origin xyz="0 0 0.033" rpy="0 0 ${pi}"/>
         <geometry>
@@ -83,9 +90,9 @@
     </link>
 
     <!-- Joint 2 -->
-    <joint name="${prefix}shoulder_lift_joint" type="revolute">
-      <parent link="${prefix}upper_arm_link" />
-      <child link = "${prefix}forearm_link" />
+    <joint name="${prefix_val}shoulder_lift_joint" type="revolute">
+      <parent link="${prefix_val}upper_arm_link" />
+      <child link = "${prefix_val}forearm_link" />
       <origin xyz="0 0 0.033" rpy="0 0 0"/>
       <axis xyz="0 1 0"/>
       <limit velocity="6.5" effort="1000" lower="${-pi*0.45}" upper="${pi*0.45}" />
@@ -93,7 +100,7 @@
     </joint>
 
     <!-- link 3 -->
-    <link name="${prefix}forearm_link">
+    <link name="${prefix_val}forearm_link">
       <collision>
         <origin xyz="0.02 0 0.15" rpy="0 0 ${pi}"/>
         <geometry>
@@ -120,9 +127,9 @@
     </link>
 
     <!-- Joint 3 -->
-    <joint name="${prefix}elbow_joint" type="revolute">
-      <parent link="${prefix}forearm_link" />
-      <child link = "${prefix}wrist_1_link" />
+    <joint name="${prefix_val}elbow_joint" type="revolute">
+      <parent link="${prefix_val}forearm_link" />
+      <child link = "${prefix_val}wrist_1_link" />
       <origin xyz="0.03 0.0 0.264" rpy="0 ${45.0*pi/180.0} 0" />
       <axis xyz="0 1 0"/>
       <limit velocity="6.5" effort="1000" lower="${-pi*0.4}" upper="${pi*0.7}" />
@@ -130,7 +137,7 @@
     </joint>
 
     <!-- link 4 -->
-    <link name="${prefix}wrist_1_link">
+    <link name="${prefix_val}wrist_1_link">
       <collision>
         <origin xyz="-0.01 0.0 0.1" rpy="0 0 ${pi}" />
         <geometry>
@@ -157,9 +164,9 @@
     </link>
 
     <!-- Joint 4 -->
-    <joint name="${prefix}wrist_1_joint" type="revolute">
-      <parent link="${prefix}wrist_1_link" />
-      <child link = "${prefix}wrist_2_link" />
+    <joint name="${prefix_val}wrist_1_joint" type="revolute">
+      <parent link="${prefix_val}wrist_1_link" />
+      <child link = "${prefix_val}wrist_2_link" />
       <origin xyz="-0.03 0.0 0.231" rpy="0 0 0" />
       <axis xyz="0 0 1" />
       <limit velocity="6.5" effort="1000" lower="${-pi*0.6}" upper="${pi*0.6}" />
@@ -167,7 +174,7 @@
     </joint>
 
     <!-- link 5 -->
-    <link name="${prefix}wrist_2_link">
+    <link name="${prefix_val}wrist_2_link">
       <collision>
         <origin xyz="0.0 0.0 0.03" rpy="0 0 ${pi}" />
         <geometry>
@@ -194,9 +201,9 @@
     </link>
 
     <!-- Joint 5 -->
-    <joint name="${prefix}wrist_2_joint" type="revolute">
-      <parent link="${prefix}wrist_2_link" />
-      <child link = "${prefix}wrist_3_link" />
+    <joint name="${prefix_val}wrist_2_joint" type="revolute">
+      <parent link="${prefix_val}wrist_2_link" />
+      <child link = "${prefix_val}wrist_3_link" />
       <origin xyz="0.0 0.0 0.027" rpy="0 0 0" />
       <axis xyz="0 1 0" />
       <limit velocity="6.5" effort="1000" lower="${-pi*0.45}" upper="${pi*0.45}" />
@@ -204,7 +211,7 @@
     </joint>
 
     <!-- link 6 -->
-    <link name="${prefix}wrist_3_link">
+    <link name="${prefix_val}wrist_3_link">
       <collision>
         <origin xyz="0.0 0.0 0.08" rpy="0 0 ${pi}" />
         <geometry>
@@ -231,9 +238,9 @@
     </link>
 
     <!-- Joint 6 -->
-    <joint name="${prefix}wrist_3_joint" type="revolute">
-      <parent link="${prefix}wrist_3_link" />
-      <child link = "${prefix}ee_link" />
+    <joint name="${prefix_val}wrist_3_joint" type="revolute">
+      <parent link="${prefix_val}wrist_3_link" />
+      <child link = "${prefix_val}ee_link" />
       <origin xyz="0.0 0.0 0.123" rpy="0 0 0" />
       <axis xyz="0 0 1" />
       <limit velocity="6.5" effort="1000" lower="${-pi*0.6}" upper="${pi*0.6}" />
@@ -241,7 +248,7 @@
     </joint>
 
     <!-- End Effector -->
-    <link name="${prefix}ee_link">
+    <link name="${prefix_val}ee_link">
       <collision>
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
         <geometry>
@@ -267,7 +274,6 @@
       </inertial>
     </link>
 
-    <xacro:manipulator_arm_transmission prefix="${prefix}" />
-
+    <xacro:manipulator_arm_transmission prefix="${prefix_val}" />
   </xacro:macro>
 </robot>
