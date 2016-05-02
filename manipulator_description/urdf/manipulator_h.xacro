@@ -7,8 +7,6 @@
 
   <xacro:property name="pi" value="3.141592654" />
   <xacro:property name="prefix_val" value="" />
-  <!-- gazebo related stuff -->
-  <xacro:include filename="$(find manipulator_description)/urdf/common.xacro" />
 
   <xacro:macro name="manipulator_h_arm" params="prefix joint_limited parent *origin">
 
@@ -16,8 +14,6 @@
     <xacro:if value="${prefix.__len__()}">
       <xacro:property name="prefix_val" value="${prefix + '_'}" />
     </xacro:if>
-
-    <xacro:manipulator_arm_gazebo prefix="${prefix}" prefix_val="${prefix_val}" />
 
     <!-- First element of the arm fixed to the parent -->
     <joint name="${parent}_${prefix_val}_base_joint" type="fixed">
