@@ -11,8 +11,10 @@
     </xacro:if>
 
     <gazebo>
-      <plugin name="${prefix_val}ros_control" filename="libgazebo_ros_control.so">
+      <!-- <plugin name="${prefix_val}ros_control" filename="libgazebo_ros_control.so"> -->
+      <plugin name="${prefix_val}ros_control" filename="libfilter_gazebo_ros_control.so">
         <robotNamespace>${prefix}</robotNamespace>
+        <filterJointsParam>joint_names</filterJointsParam>
         <!--robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType-->
       </plugin>
     </gazebo>
