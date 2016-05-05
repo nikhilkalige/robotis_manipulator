@@ -1,4 +1,5 @@
-manipulator_msgs/KeyValue[] table
+string[] joint_names
 ---
 bool success
+manipulator_msgs/KeyValue[] table
 ---
