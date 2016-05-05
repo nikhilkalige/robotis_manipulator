@@ -27,7 +27,7 @@
       <collision>
         <origin xyz="0 0 0.063" rpy="0 0 ${pi}"/>
         <geometry>
-          <box size="0.06 0.06 0.126"/>
+          <box size="0.054 0.054 0.126"/>
         </geometry>
       </collision>
       <visual>
@@ -61,9 +61,9 @@
     <!-- link 2 -->
     <link name="${prefix_val}upper_arm_link">
       <collision>
-        <origin xyz="0 0 0.033" rpy="0 0 ${pi}"/>
+        <origin xyz="0 0 0.03" rpy="0 0 ${pi}"/>
         <geometry>
-          <box size="0.07 0.15 0.08"/>
+          <box size="0.06 0.14 0.06"/>
         </geometry>
       </collision>
 
@@ -98,9 +98,9 @@
     <!-- link 3 -->
     <link name="${prefix_val}forearm_link">
       <collision>
-        <origin xyz="0.02 0 0.15" rpy="0 0 ${pi}"/>
+        <origin xyz="-.001 0 0.148" rpy="${pi/2} 0 ${pi}"/>
         <geometry>
-          <box size="0.1 0.15 0.25"/>
+          <mesh filename="package://manipulator_description/meshes/collision/link3.stl"/>
         </geometry>
       </collision>
 
@@ -135,9 +135,9 @@
     <!-- link 4 -->
     <link name="${prefix_val}wrist_1_link">
       <collision>
-        <origin xyz="-0.01 0.0 0.1" rpy="0 0 ${pi}" />
+        <origin xyz="-0.03 0.0 0.1285" rpy="${pi/2} 0 ${pi}" />
         <geometry>
-          <box size="0.1 0.15 0.25" />
+          <mesh filename="package://manipulator_description/meshes/collision/link4.stl"/>
         </geometry>
       </collision>
 
@@ -172,9 +172,9 @@
     <!-- link 5 -->
     <link name="${prefix_val}wrist_2_link">
       <collision>
-        <origin xyz="0.0 0.0 0.03" rpy="0 0 ${pi}" />
+        <origin xyz="0.0 0.0 0.024" rpy="0 0 ${pi}" />
         <geometry>
-          <box size="0.06 0.13 0.09" />
+          <box size="0.048 0.09 0.048" />
         </geometry>
       </collision>
 
@@ -209,9 +209,9 @@
     <!-- link 6 -->
     <link name="${prefix_val}wrist_3_link">
       <collision>
-        <origin xyz="0.0 0.0 0.08" rpy="0 0 ${pi}" />
+        <origin xyz="0.0 0.0 0.081" rpy="${pi/2} 0 ${pi/2}" />
         <geometry>
-          <box size="0.07 0.07 0.08" />
+          <mesh filename="package://manipulator_description/meshes/collision/link6.stl"/>
         </geometry>
       </collision>
 
