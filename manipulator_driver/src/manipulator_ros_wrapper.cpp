@@ -200,11 +200,18 @@ private:
                     param[n++]  = 1;
                 else
                     param[n++]  = 0;
-                ROS_INFO("Torque %sed for %s", goal->enable[i] ? "enable": "disable", goal->joint_names[i].c_str());
+                ROS_INFO("Torque %sd for %s", goal->enable[i] ? "enable": "disable", goal->joint_names[i].c_str());
             }
         }
-        driver_.write(addr, length, param);
-        control_torque_result_.success = true;
+
+        if(param.size() != 0) {
+            driver_.write(addr, length, param);
+            control_torque_result_.success = true;
+        }
+        else {
+            ROS_INFO("Torque Action failed, Unable to find valid id's for joint name");
+            control_torque_result_.success = false;
+        }
         control_torque_as_.setSucceeded(control_torque_result_);
     }
 
