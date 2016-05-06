@@ -11,7 +11,7 @@
   <!-- arm common -->
   <include file="$(find manipulator_driver)/launch/manipulator_ros_control.launch">
     <arg name="ns" value="rightarm" />
-    <arg name="port" value="/dev/ttyUSB1" />
+    <arg name="port" value="/dev/rightarm" />
   </include>
 
 </launch>

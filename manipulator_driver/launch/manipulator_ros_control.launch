@@ -8,8 +8,8 @@
   <!-- GDB functionality -->
   <arg name="debug" default="false" />
   <arg unless="$(arg debug)" name="launch_prefix" value="" />
-  <arg     if="$(arg debug)" name="launch_prefix" value="gdbserver localhost:10000" />
-  <!-- <arg     if="$(arg debug)" name="launch_prefix" value="valgrind" /> -->
+  <!-- <arg     if="$(arg debug)" name="launch_prefix" value="gdbserver localhost:10000" /> -->
+  <arg     if="$(arg debug)" name="launch_prefix" value="valgrind" />
 
   <arg name="prefix" default="" />
   <arg name="limited" default="false"/>
@@ -24,8 +24,8 @@
 
     <!-- Load hardware interface -->
     <node name="manipulator_hardware_interface" pkg="manipulator_driver" type="manipulator_driver" output="screen" launch-prefix="$(arg launch_prefix)">
-      <!-- <arg name="prefix" value="$(arg prefix)" /> -->
     </node>
+      <!-- <arg name="prefix" value="$(arg prefix)" /> -->
 
     <!-- Load controller settings -->
     <rosparam file="$(find manipulator_driver)/config/manipulator_controllers.yaml" command="load"/>
@@ -36,7 +36,7 @@
 
     <!-- load other controller -->
     <!-- <node name="ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false" output="screen" args="load pos_based_pos_traj_controller" /> -->
-    <node name="ros_control_controller_manager" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="pos_based_pos_traj_controller" />
+    <node name="ros_control_controller_manager" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_trajectory_controller" />
 
     <!-- Convert joint states to /tf tranforms -->
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
