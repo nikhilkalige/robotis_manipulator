@@ -104,7 +104,7 @@ void ManipulatorDriver::write_position(std::vector<double> positions) {
             data[n++]  = DXL_HIBYTE(DXL_HIWORD(pos));
         }
     }
-   // write(addr, length, data);
+    write(addr, length, data);
 }
 
 void ManipulatorDriver::write_velocity(std::vector<double> velocities) {

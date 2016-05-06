@@ -119,13 +119,14 @@ void ManipulatorHardwareInterface::read() {
         return;
     for (int i = 0; i < num_joints_; ++i) {
         joint_position_[i] = pos[i];
-        joint_velocity_[i] = vel[i];
+        // joint_velocity_[i] = vel[i];
+        joint_velocity_[i] = 0;
         joint_effort_[i] = 0;
     }
 }
 
 void ManipulatorHardwareInterface::write() {
-    // robot_->write_position(joint_position_command_);
+    robot_->write_position(joint_position_command_);
 }
 
 void ManipulatorHardwareInterface::hold() {
