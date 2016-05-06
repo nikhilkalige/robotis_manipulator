@@ -87,7 +87,6 @@ void ManipulatorHardwareInterface::init() {
     joint_velocity_.resize(num_joints_);
     joint_effort_.resize(num_joints_);
     joint_position_command_.resize(num_joints_);
-    joint_velocity_command_.resize(num_joints_);
 
     // Initialize controller
     for (std::size_t i = 0; i < num_joints_; ++i) {
@@ -101,14 +100,14 @@ void ManipulatorHardwareInterface::init() {
                         &joint_effort_[i]));
 
         // Create position joint interface
-        pos_vel_joint_interface_.registerHandle(
-                hardware_interface::PosVelJointHandle(
+        position_joint_interface_.registerHandle(
+                hardware_interface::JointHandle(
                         joint_state_interface_.getHandle(joint_names_[i]),
-                        &joint_position_command_[i], &joint_velocity_command_[i]));
+                        &joint_position_command_[i]));
     }
 
     registerInterface(&joint_state_interface_); // From RobotHW base class.
-    registerInterface(&pos_vel_joint_interface_); // From RobotHW base class.
+    registerInterface(&position_joint_interface_); // From RobotHW base class.
 }
 
 void ManipulatorHardwareInterface::read() {
@@ -126,7 +125,7 @@ void ManipulatorHardwareInterface::read() {
 }
 
 void ManipulatorHardwareInterface::write() {
-    robot_->write_position(joint_position_command_);
+    // robot_->write_position(joint_position_command_);
 }
 
 void ManipulatorHardwareInterface::hold() {
@@ -139,7 +138,6 @@ void ManipulatorHardwareInterface::hold() {
 
     for (int i = 0; i < num_joints_; ++i) {
         joint_position_command_[i] = pos[i];
-        joint_velocity_command_[i] = vel[i];
     }
 }
 
