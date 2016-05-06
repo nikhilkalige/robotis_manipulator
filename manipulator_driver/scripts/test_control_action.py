@@ -22,8 +22,8 @@ def control_torqure_action():
 
     # Creates a goal to send to the action server.
     goal = ControlTorqueGoal()
-    goal.joint_names = ['shoulder_pan_joint', 'shoulder_lift_joint']
-    goal.enable = [False, False]
+    goal.joint_names = ['leftarm_shoulder_pan_joint', 'leftarm_shoulder_lift_joint']
+    goal.enable = [True, True]
 
     # Sends the goal to the action server.
     client.send_goal(goal)
