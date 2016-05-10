@@ -46,6 +46,7 @@ public:
     void write(int addr, int data_length, std::vector<unsigned char> param);
     void write_position(std::vector<double> positions);
     void write_velocity(std::vector<double> velocities);
+    bool switch_mode(bool postion_mode);
 };
 
 #endif /* MANIPULATOR_DRIVER_H_ */

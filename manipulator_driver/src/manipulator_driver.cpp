@@ -139,5 +139,31 @@ void ManipulatorDriver::write_velocity(std::vector<double> velocities) {
     //write(addr, length, data);
 }
 
+bool ManipulatorDriver::switch_mode(bool postion_mode) {
+    int mode_value;
+    if (postion_mode) {
+        ROS_DEBUG("Switching to position control mode");
+        mode_value = 3;
+    }
+    else {
+        ROS_DEBUG("Switching to velocity control mode");
+        mode_value = 1;
+    }
+
+    // The torque needs to be disabled in order to change the operating mode, so
+    // save the torque -> change mode -> rewrite torque
+    com_lock_->lock();
+    for (int i = 0; i < controller_->idList.size(); ++i) {
+        int id = controller_->idList[i];
+        int torque;
+
+        controller_->getTorqueEnable(id, &torque);
+        controller_->setOperatingMode(id, mode_value);
+        controller_->setTorqueEnable(id, torque);
+    }
+    com_lock_->unlock();
+    ROS_DEBUG("Completed switching the mode");
+}
+
 
 
