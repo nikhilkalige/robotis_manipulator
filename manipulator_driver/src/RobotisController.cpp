@@ -312,6 +312,16 @@ int RobotisController::setPositionDGain(int id, int dgain)
     return dxlList[id]->write(dxlList[id]->ADDR_POSITION_D_GAIN, dgain);
 }
 
+int RobotisController::getOperatingMode(int id, int *mode)
+{
+    return dxlList[id]->read(dxlList[id]->ADDR_OPERATING_MODE, (long*)mode);
+}
+
+int RobotisController::setOperatingMode(int id, int mode)
+{
+    return dxlList[id]->write(dxlList[id]->ADDR_OPERATING_MODE, mode);
+}
+
 int RobotisController::isMoving(int id, bool *ismoving)
 {
     long _moving;

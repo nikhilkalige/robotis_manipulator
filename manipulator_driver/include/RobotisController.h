@@ -87,6 +87,9 @@ public:
     int     getPositionDGain(int id, int *dgain);
     int     setPositionDGain(int id, int dgain);
 
+    int     getOperatingMode(int id, int *mode);
+    int     setOperatingMode(int id, int mode);
+
     int     isMoving(int id, bool *ismoving);
 
 //    ADDR_RETURN_DELAY_TIME;
