@@ -29,6 +29,13 @@
 #include <tf/tf.h>
 #include <tf/transform_broadcaster.h>
 
+
+// Disables read and write commands in the control loop
+// #define SIMULATION
+
+// Prints the control loop rate in Hz
+// #define CONTROLLOOP_SPEED
+
 // Hold all the address values that are retrieved during the controltable action
 static std::map<std::string, int> table_addr = {
     {"BaudRate", 8},
@@ -113,10 +120,11 @@ public:
         joint_names.push_back(joint_prefix + "wrist_2_joint");
         joint_names.push_back(joint_prefix + "wrist_3_joint");
 
+#ifndef SIMULATION
         if (!controller_.initialize())
             exit(-1);
-
         addGroupRead();
+#endif
         hardware_interface_.reset(
                 new ros_control_manipulator::ManipulatorHardwareInterface(nh_, &driver_));
         controller_manager_.reset(
@@ -149,10 +157,15 @@ private:
         struct timespec last_time, current_time;
         static const double BILLION = 1000000000.0;
 
+#ifdef CONTROLLOOP_SPEED
+        ros::Time speed;
+        int temp = 0;
+#endif
         hardware_interface_->hold();
         ROS_INFO("Starting the control loop");
 
         clock_gettime(CLOCK_MONOTONIC, &last_time);
+
         while (ros::ok()) {
             clock_gettime(CLOCK_MONOTONIC, &current_time);
             elapsed_time = ros::Duration(
@@ -160,12 +173,27 @@ private:
                     + (current_time.tv_nsec - last_time.tv_nsec)
                       / BILLION);
             last_time = current_time;
-            // Input
+
+#ifndef SIMULATION
             hardware_interface_->read();
-            // Control
+#endif
             controller_manager_->update(ros::Time::now(), elapsed_time);
-            // Output
+
+#ifndef SIMULATION
             hardware_interface_->write();
+#endif
+#ifdef CONTROLLOOP_SPEED
+            temp++;
+            if (temp == 1)
+                speed = ros::Time::now();
+
+            if (temp == 10000) {
+                temp = 0;
+                ros::Duration hz = ros::Time::now() - speed;
+                ROS_DEBUG_STREAM_NAMED("manipulator_driver", "Hz " <<  (10000.0 / hz.toSec()));
+            }
+#endif
+            
         }
     }
 
