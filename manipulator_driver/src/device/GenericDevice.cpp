@@ -52,6 +52,7 @@ GenericDevice::GenericDevice(PortHandler *port, long min_value, long max_value, 
     ADDR_PRESENT_VELOCITY       = -1;
     ADDR_PRESENT_LOAD           = -1;
     ADDR_MOVING                 = -1;
+    ADDR_OPERATING_MODE         = -1;
 }
 
 int GenericDevice::getAddrLength(int addr)

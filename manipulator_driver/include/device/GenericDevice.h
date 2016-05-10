@@ -71,6 +71,7 @@ public:
     int             ADDR_PRESENT_VELOCITY;
     int             ADDR_PRESENT_LOAD;
     int             ADDR_MOVING;
+    int             ADDR_OPERATING_MODE;
 
     virtual ~GenericDevice() { }
 

@@ -56,6 +56,7 @@ public:
         ADDR_PRESENT_VELOCITY                       = P_PRESENT_VELOCITY;
         ADDR_PRESENT_LOAD                           = P_PRESENT_LOAD;
         ADDR_MOVING                                 = P_MOVING;
+        ADDR_OPERATING_MODE                         = P_OPERATING_MODE;
 
         addr_length[P_MODEL_NUMBER]                 = 2;
         addr_length[P_FIRMWARE_VERSION]             = 1;
