@@ -21,8 +21,11 @@ public:
     long rad2Value(double radian)   { return 0; }
     double value2Rad(long value)    { return 0; }
 
+    long rpm2Value(double rpm) { return 0; }
+    double value2Rpm(long value) { return 0; }
+
     ~UNKNOWN() { }
-    UNKNOWN(PortHandler *port) : GenericDevice(port, 0, 4095, 2048, -PI, PI)
+    UNKNOWN(PortHandler *port) : GenericDevice(port, 0, 4095, 2048, -PI, PI, 1)
     {
         ADDR_MODEL_NUMBER                           = P_MODEL_NUMBER;
         ADDR_FIRMWARE_VERSION                       = P_FIRMWARE_VERSION;

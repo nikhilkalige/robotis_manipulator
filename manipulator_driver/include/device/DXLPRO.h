@@ -34,9 +34,17 @@ public:
     long rad2Value(double radian)   { return radian * MAX_VALUE / MAX_RADIAN; }
     double value2Rad(long value)    { return (double)value * MAX_RADIAN / (double)MAX_VALUE; }
 
+    long rpm2Value(double rpm) {
+        return rpm * GEAR_RATIO;
+    }
+    double value2Rpm(long value) {
+        return (double)value / GEAR_RATIO;
+    }
+
     ~DXLPRO() { }
-    DXLPRO(PortHandler *port, long min_value, long max_value, long center_value, double min_radian, double max_radian)
-        : GenericDevice(port, min_value, max_value, center_value, min_radian, max_radian)
+    DXLPRO(PortHandler *port, long min_value, long max_value, long center_value, double min_radian, double max_radian,
+           unsigned int gear_ratio)
+        : GenericDevice(port, min_value, max_value, center_value, min_radian, max_radian, gear_ratio)
     {
         ADDR_MODEL_NUMBER                               = P_MODEL_NUMBER;
         ADDR_FIRMWARE_VERSION                           = P_FIRMWARE_VERSION;

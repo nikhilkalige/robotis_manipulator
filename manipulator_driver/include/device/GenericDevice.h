@@ -40,13 +40,15 @@ protected:
     const long      CENTER_VALUE;
     const double    MIN_RADIAN;
     const double    MAX_RADIAN;
+    const unsigned int GEAR_RATIO;
+
     std::map<int, int> addr_length;
 
     char            jointName[40];
     PortHandler     *comPort;
     PacketHandler   *packetHandler;
 
-    GenericDevice(PortHandler *port, long min_value, long max_value, long center_value, double min_radian, double max_radian);
+    GenericDevice(PortHandler *port, long min_value, long max_value, long center_value, double min_radian, double max_radian, unsigned int gear_ratio);
 
 public:
     int             ID;
@@ -77,6 +79,9 @@ public:
 
     virtual long rad2Value(double radian)   = 0;
     virtual double value2Rad(long value)    = 0;
+
+    virtual long rpm2Value(double rpm) = 0;
+    virtual double value2Rpm(long value) = 0;
 
     static GenericDevice *getInstance(PortHandler *port, int id, const char *joint_name, const char *model, float protocol_ver = 2.0);
 

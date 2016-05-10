@@ -28,9 +28,10 @@
 
 using namespace Robotis;
 
-GenericDevice::GenericDevice(PortHandler *port, long min_value, long max_value, long center_value, double min_radian, double max_radian) :
+GenericDevice::GenericDevice(PortHandler *port, long min_value, long max_value, long center_value, double min_radian, double max_radian, unsigned int gear_ratio) :
     comPort(port), packetHandler(PacketHandler::getPacketHandler(2.0)),
     MIN_VALUE(min_value), MAX_VALUE(max_value), CENTER_VALUE(center_value), MIN_RADIAN(min_radian), MAX_RADIAN(max_radian),
+    GEAR_RATIO(gear_ratio),
     ID(0), PROTOCOL_VERSION(2.0)
 {
     ADDR_MODEL_NUMBER           = -1;
@@ -72,23 +73,23 @@ GenericDevice *GenericDevice::getInstance(PortHandler *port, int id, const char 
     if(strcmp(model, "MX-28") == 0 || strcmp(model, "MX28") == 0 || strcmp(model, "mx-28") == 0 || strcmp(model, "mx28") == 0)
         ret = new MX28(port);
     else if(strcmp(model, "L42-10-S300-R") == 0)
-        ret = new DXLPRO(port, -2047, 2048, 0, -PI, PI);
+        ret = new DXLPRO(port, -2047, 2048, 0, -PI, PI, 300);
     else if(strcmp(model, "L54-50-S290-R") == 0)
-        ret = new DXLPRO(port, -103860, 103860, 0, -PI, PI);
+        ret = new DXLPRO(port, -103860, 103860, 0, -PI, PI, 290);
     else if(strcmp(model, "L54-30-S400-R") == 0)
-        ret = new DXLPRO(port, -144198, 144198, 0, -PI, PI);
+        ret = new DXLPRO(port, -144198, 144198, 0, -PI, PI, 400);
     else if(strcmp(model, "L54-50-S500-R") == 0 || strcmp(model, "L54-30-S500-R") == 0)
-        ret = new DXLPRO(port, -180684, 180684, 0, -PI, PI);
+        ret = new DXLPRO(port, -180684, 180684, 0, -PI, PI, 500);
     else if(strcmp(model, "M42-10-S260-R") == 0)
-        ret = new DXLPRO(port, -131584, 131584, 0, -PI, PI);
+        ret = new DXLPRO(port, -131584, 131584, 0, -PI, PI, 260);
     else if(strcmp(model, "M54-40-S250-R") == 0 || strcmp(model, "M54-60-S250-R") == 0)
-        ret = new DXLPRO(port, -125700, 125700, 0, -PI, PI);
+        ret = new DXLPRO(port, -125700, 125700, 0, -PI, PI, 250);
     else if(strcmp(model, "H42-20-S300-R") == 0)
-        ret = new DXLPRO(port, -151900, 151900, 0, -PI, PI);
+        ret = new DXLPRO(port, -151900, 151900, 0, -PI, PI, 300);
     else if(strcmp(model, "H54-100-S500-R") == 0 || strcmp(model, "H54-200-S500-R") == 0 || strcmp(model, "H54-200-B500-R") == 0)
-        ret = new DXLPRO(port, -250950, 250950, 0, -PI, PI);
+        ret = new DXLPRO(port, -250950, 250950, 0, -PI, PI, 500);
     else if(strcmp(model, "GRIPPER") == 0)
-        ret = new DXLPRO(port, -110000, 110000, 0, -PI/4.0, PI/4.0);
+        ret = new DXLPRO(port, -110000, 110000, 0, -PI/4.0, PI/4.0, 1);
     else
         ret = new UNKNOWN(port);
 
