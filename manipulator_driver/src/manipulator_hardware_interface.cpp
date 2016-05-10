@@ -87,6 +87,7 @@ void ManipulatorHardwareInterface::init() {
     joint_velocity_.resize(num_joints_);
     joint_effort_.resize(num_joints_);
     joint_position_command_.resize(num_joints_);
+    joint_velocity_command_.resize(num_joints_);
 
     // Initialize controller
     for (std::size_t i = 0; i < num_joints_; ++i) {
@@ -104,10 +105,20 @@ void ManipulatorHardwareInterface::init() {
                 hardware_interface::JointHandle(
                         joint_state_interface_.getHandle(joint_names_[i]),
                         &joint_position_command_[i]));
+
+        // Create velocity joint interface
+        velocity_joint_interface_.registerHandle(
+                hardware_interface::JointHandle(
+                        joint_state_interface_.getHandle(joint_names_[i]),
+                        &joint_velocity_command_[i]));
     }
 
     registerInterface(&joint_state_interface_); // From RobotHW base class.
     registerInterface(&position_joint_interface_); // From RobotHW base class.
+    registerInterface(&velocity_joint_interface_); // From RobotHW base class.
+
+    velocity_interface_running_ = false;
+    position_interface_running_ = false;
 }
 
 void ManipulatorHardwareInterface::read() {
@@ -119,8 +130,8 @@ void ManipulatorHardwareInterface::read() {
         return;
     for (int i = 0; i < num_joints_; ++i) {
         joint_position_[i] = pos[i];
-        // joint_velocity_[i] = vel[i];
-        joint_velocity_[i] = 0;
+        joint_velocity_[i] = vel[i];
+        // joint_velocity_[i] = 0;
         joint_effort_[i] = 0;
     }
 }
@@ -139,6 +150,39 @@ void ManipulatorHardwareInterface::hold() {
 
     for (int i = 0; i < num_joints_; ++i) {
         joint_position_command_[i] = pos[i];
+    }
+}
+
+void ManipulatorHardwareInterface::doSwitch(const std::list<hardware_interface::ControllerInfo>& start_list,
+                                            const std::list<hardware_interface::ControllerInfo>& stop_list) {
+    for (std::list<hardware_interface::ControllerInfo>::const_iterator controller_it =
+            stop_list.begin(); controller_it != stop_list.end();
+         ++controller_it) {
+        const hardware_interface::InterfaceResources& iface_res = controller_it->claimed_resources.front();
+        if (iface_res.hardware_interface == "hardware_interface::VelocityJointInterface") {
+            velocity_interface_running_ = false;
+            ROS_DEBUG("Stopping velocity interface");
+        }
+        else if (iface_res.hardware_interface == "hardware_interface::PositionJointInterface") {
+            position_interface_running_ = false;
+            ROS_DEBUG("Stopping position interface");
+        }
+    }
+
+    for (std::list<hardware_interface::ControllerInfo>::const_iterator controller_it =
+            start_list.begin(); controller_it != start_list.end();
+         ++controller_it) {
+        const hardware_interface::InterfaceResources& iface_res = controller_it->claimed_resources.front();
+        if (iface_res.hardware_interface == "hardware_interface::VelocityJointInterface") {
+            velocity_interface_running_ = true;
+            ROS_DEBUG("Starting velocity interface");
+            robot_->switch_mode(false);
+        }
+        else if (iface_res.hardware_interface == "hardware_interface::PositionJointInterface") {
+            position_interface_running_ = true;
+            ROS_DEBUG("Starting position interface");
+            robot_->switch_mode(true);
+        }
     }
 }
 

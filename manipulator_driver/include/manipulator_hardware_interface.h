@@ -41,6 +41,12 @@ public:
     /// \brief initialize the command variable until the controller starts
     virtual void hold();
 
+    /*bool prepareSwitch(const std::list<ControllerInfo>& start_list,
+                       const std::list<ControllerInfo>& stop_list) { return true; }*/
+
+    void doSwitch(const std::list<hardware_interface::ControllerInfo>& start_list,
+                  const std::list<hardware_interface::ControllerInfo>& stop_list);
+
 protected:
 
     // Startup and shutdown of the internal node inside a roscpp program
@@ -49,6 +55,7 @@ protected:
     // Interfaces
     hardware_interface::JointStateInterface joint_state_interface_;
     hardware_interface::PositionJointInterface position_joint_interface_;
+    hardware_interface::VelocityJointInterface velocity_joint_interface_;
 
     // Shared memory
     std::vector<std::string> joint_names_;
@@ -57,6 +64,10 @@ protected:
     std::vector<double> joint_effort_;
 
     std::vector<double> joint_position_command_;
+    std::vector<double> joint_velocity_command_;
+
+    bool velocity_interface_running_;
+    bool position_interface_running_;
 
     std::size_t num_joints_;
     double robot_force_[3] = { 0., 0., 0. };
