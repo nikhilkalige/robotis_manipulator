@@ -34,6 +34,13 @@ public:
     long rad2Value(double radian)   { return radian * CENTER_VALUE / MAX_RADIAN + CENTER_VALUE; }
     double value2Rad(long value)    { return (double)value * MAX_RADIAN / (double)CENTER_VALUE - MAX_RADIAN; }
 
+    long rpm2Value(double rpm) {
+        return rpm * GEAR_RATIO;
+    }
+    double value2Rpm(long value) {
+        return (double)value / GEAR_RATIO;
+    }
+
     ~MX28() { }
     MX28(PortHandler *port) : GenericDevice(port, 0, 4095, 2048, -PI, PI, 1)
     {
