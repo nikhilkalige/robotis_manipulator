@@ -74,6 +74,7 @@ class RosWrapper {
 protected:
     ros::NodeHandle nh_;
     std::mutex com_lock_;
+    std::string ns_;
     Robotis::RobotisController controller_;
     Robotis::GroupHandler grp_handler_;
 
@@ -105,8 +106,8 @@ public:
         std::vector<std::string> joint_names;
         char buf[256];
 
-        std::string ns = ros::this_node::getNamespace();
-        ROS_INFO("Running with namespace - %s", ns.c_str());
+        ns_ = ros::this_node::getNamespace();
+        ROS_INFO("Running with namespace - %s", ns_.c_str());
 
         if (ros::param::get("~prefix", joint_prefix)) {
             if (joint_prefix.length() > 0) {
@@ -190,7 +191,7 @@ private:
             if (temp == 10000) {
                 temp = 0;
                 ros::Duration hz = ros::Time::now() - speed;
-                ROS_DEBUG_STREAM_NAMED("manipulator_driver", "Hz " <<  (10000.0 / hz.toSec()));
+                ROS_DEBUG_STREAM_NAMED(ns_, "Hz " <<  (10000.0 / hz.toSec()));
             }
 #endif
             
