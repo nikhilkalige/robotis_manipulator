@@ -137,7 +137,12 @@ void ManipulatorHardwareInterface::read() {
 }
 
 void ManipulatorHardwareInterface::write() {
-    robot_->write_position(joint_position_command_);
+    if (velocity_interface_running_) {
+        robot_->write_velocity(joint_velocity_command_);
+    }
+    else if (position_interface_running_){
+        robot_->write_position(joint_position_command_);
+    }
 }
 
 void ManipulatorHardwareInterface::hold() {
