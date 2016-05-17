@@ -151,18 +151,24 @@ bool ManipulatorDriver::switch_mode(bool postion_mode) {
     }
 
     // The torque needs to be disabled in order to change the operating mode, so
-    // save the torque -> change mode -> rewrite torque
+    // save the torque -> disable torque -> change mode -> rewrite torque
     com_lock_->lock();
     for (int i = 0; i < controller_->idList.size(); ++i) {
         int id = controller_->idList[i];
-        int torque;
+        long torque;
 
-        controller_->getTorqueEnable(id, &torque);
+        controller_->getTorqueEnable(id, (int*)&torque);
+        controller_->setTorqueEnable(id, 0);
         controller_->setOperatingMode(id, mode_value);
-        controller_->setTorqueEnable(id, torque);
+        // Set values so we use the maximum velocity and acceleration
+        controller_->setGoalVelocity(id, 0);
+        controller_->setGoalTorque(id, 0);
+        controller_->setGoalAcceleration(id, 0);
+        controller_->setTorqueEnable(id, (int)torque);
     }
     com_lock_->unlock();
     ROS_DEBUG("Completed switching the mode");
+    return true;
 }
 
 
