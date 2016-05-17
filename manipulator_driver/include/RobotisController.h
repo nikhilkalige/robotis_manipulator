@@ -78,6 +78,8 @@ public:
     int     getGoalTorque(int id, long *torque);
     int     setGoalTorque(int id, long torque);
 
+    int     setGoalAcceleration(int id, long acceleration);
+
     int     getPositionPGain(int id, int *pgain);
     int     setPositionPGain(int id, int pgain);
 

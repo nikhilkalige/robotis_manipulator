@@ -74,6 +74,7 @@ public:
     int             ADDR_PRESENT_LOAD;
     int             ADDR_MOVING;
     int             ADDR_OPERATING_MODE;
+    int             ADDR_GOAL_ACCELERATION;
 
     virtual ~GenericDevice() { }
 

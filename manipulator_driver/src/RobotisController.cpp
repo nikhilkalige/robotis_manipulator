@@ -322,6 +322,11 @@ int RobotisController::setOperatingMode(int id, int mode)
     return dxlList[id]->write(dxlList[id]->ADDR_OPERATING_MODE, mode);
 }
 
+int RobotisController::setGoalAcceleration(int id, long acceleration)
+{
+    return dxlList[id]->write(dxlList[id]->ADDR_GOAL_ACCELERATION, acceleration);
+}
+
 int RobotisController::isMoving(int id, bool *ismoving)
 {
     long _moving;
