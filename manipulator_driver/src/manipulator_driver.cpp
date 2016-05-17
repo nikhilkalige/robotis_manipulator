@@ -57,7 +57,7 @@ std::vector<double> ManipulatorDriver::get_velocity() {
         }
 
         double velocity_ms;
-        velocity_ms = controller_->getDevice(id)->value2Rad((int)velocity);
+        velocity_ms = controller_->getDevice(id)->value2Rpm((int)velocity);
         joint_states.push_back(velocity_ms);
 
         /*
@@ -111,8 +111,8 @@ void ManipulatorDriver::write_velocity(std::vector<double> velocities) {
     int addr, length, n = 0;
     std::vector<unsigned char> data;
 
-    // printf("%f %f %f %f %f %f\n",positions[0], positions[1], positions[2],\
-    //  positions[3], positions[4], positions[5]);
+    // printf("%f %f %f %f %f %f\n",velocities[0], velocities[1], velocities[2],
+    //       velocities[3], velocities[4], velocities[5]);
 
     for (int i = 0; i < velocities.size(); ++i) {
         int id = controller_->idList[i];
@@ -120,7 +120,7 @@ void ManipulatorDriver::write_velocity(std::vector<double> velocities) {
 
         addr = device->ADDR_GOAL_VELOCITY;
         length = device->getAddrLength(addr);
-        int pos = device->rad2Value(velocities[i]);
+        int pos = device->rpm2Value(velocities[i]);
         data.resize(data.size() + length + 1);
         data[n++]  = id;
         if(length == 2)
@@ -136,7 +136,7 @@ void ManipulatorDriver::write_velocity(std::vector<double> velocities) {
             data[n++]  = DXL_HIBYTE(DXL_HIWORD(pos));
         }
     }
-    //write(addr, length, data);
+    write(addr, length, data);
 }
 
 bool ManipulatorDriver::switch_mode(bool postion_mode) {
