@@ -57,7 +57,7 @@ std::vector<double> ManipulatorDriver::get_velocity() {
         }
 
         double velocity_ms;
-        velocity_ms = controller_->getDevice(id)->value2Rpm((int)velocity);
+        velocity_ms = controller_->getDevice(id)->value2Velocity((int)velocity);
         joint_states.push_back(velocity_ms);
 
         /*
@@ -120,7 +120,7 @@ void ManipulatorDriver::write_velocity(std::vector<double> velocities) {
 
         addr = device->ADDR_GOAL_VELOCITY;
         length = device->getAddrLength(addr);
-        int pos = device->rpm2Value(velocities[i]);
+        int pos = device->velocity2Value(velocities[i]);
         data.resize(data.size() + length + 1);
         data[n++]  = id;
         if(length == 2)

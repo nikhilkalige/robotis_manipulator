@@ -81,8 +81,8 @@ public:
     virtual long rad2Value(double radian)   = 0;
     virtual double value2Rad(long value)    = 0;
 
-    virtual long rpm2Value(double rpm) = 0;
-    virtual double value2Rpm(long value) = 0;
+    virtual long velocity2Value(double vel) = 0;
+    virtual double value2Velocity(long value) = 0;
 
     static GenericDevice *getInstance(PortHandler *port, int id, const char *joint_name, const char *model, float protocol_ver = 2.0);
 

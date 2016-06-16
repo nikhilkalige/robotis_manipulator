@@ -34,11 +34,11 @@ public:
     long rad2Value(double radian)   { return radian * MAX_VALUE / MAX_RADIAN; }
     double value2Rad(long value)    { return (double)value * MAX_RADIAN / (double)MAX_VALUE; }
 
-    long rpm2Value(double rpm) {
-        return rpm * GEAR_RATIO;
+    long velocity2Value(double vel) {
+        return (vel * GEAR_RATIO) * (30 / PI);
     }
-    double value2Rpm(long value) {
-        return (double)value / GEAR_RATIO;
+    double value2Velocity(long value) {
+        return ((double)value / GEAR_RATIO) * (PI / 30);
     }
 
     ~DXLPRO() { }

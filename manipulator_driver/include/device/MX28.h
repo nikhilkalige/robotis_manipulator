@@ -34,11 +34,11 @@ public:
     long rad2Value(double radian)   { return radian * CENTER_VALUE / MAX_RADIAN + CENTER_VALUE; }
     double value2Rad(long value)    { return (double)value * MAX_RADIAN / (double)CENTER_VALUE - MAX_RADIAN; }
 
-    long rpm2Value(double rpm) {
-        return rpm * GEAR_RATIO;
+    long velocity2Value(double vel) {
+        return (vel * GEAR_RATIO) * (30 / PI);
     }
-    double value2Rpm(long value) {
-        return (double)value / GEAR_RATIO;
+    double value2Velocity(long value) {
+        return ((double)value / GEAR_RATIO) * (PI / 30);
     }
 
     ~MX28() { }
