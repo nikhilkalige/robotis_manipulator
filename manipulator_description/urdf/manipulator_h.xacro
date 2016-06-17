@@ -39,12 +39,12 @@
       </visual>
 
       <inertial>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <mass value="0.936"/>
-        <inertia
-          ixx="1.0" ixy="0.0" ixz="0.0"
-          iyy="1.0" iyz="0.0"
-          izz="1.0"/>
+        <!-- <origin xyz="0 0 0" rpy="0 0 0"/> -->
+        <!-- <mass value="0.936"/> -->
+        <!-- <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" /> -->
+        <origin xyz="0.00023 0.00000 0.06223" rpy="0 0 0"/>
+        <mass value="0.85644"/>
+        <inertia ixx="0.00121064" ixy="0.0" ixz="0.00001100" iyy="0.00120886" iyz="0.0" izz="0.00038103" />
       </inertial>
     </link>
 
@@ -55,7 +55,7 @@
       <origin xyz="0 0 0.126" rpy="0 0 0"/>
       <axis xyz="0 0 1"/>
       <limit velocity="6.5" effort="1000" lower="${-pi*0.95}" upper="${pi*0.95}" />
-      <dynamics damping="0.7"/>
+      <dynamics damping="0"/>
     </joint>
 
     <!-- link 2 -->
@@ -76,12 +76,12 @@
       </visual>
 
       <inertial>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <mass value="1.030"/>
-        <inertia
-          ixx="1.0" ixy="0.0" ixz="0.0"
-          iyy="1.0" iyz="0.0"
-          izz="1.0"/>
+        <!-- <origin xyz="0 0 0" rpy="0 0 0"/> -->
+        <!-- <mass value="1.030"/> -->
+        <!-- <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" /> -->
+        <origin xyz="0.00000 0.00080 0.03183" rpy="0 0 0"/>
+        <mass value="0.94658"/>
+        <inertia ixx="0.00152547" ixy="0.0" ixz="0.0" iyy="0.00045954" iyz="-0.00001086" izz="0.00151740" />
       </inertial>
     </link>
 
@@ -92,7 +92,7 @@
       <origin xyz="0 0 0.033" rpy="0 0 0"/>
       <axis xyz="0 1 0"/>
       <limit velocity="6.5" effort="1000" lower="${-pi*0.6}" upper="${pi*0.6}" />
-      <dynamics damping="0.7"/>
+      <dynamics damping="0"/>
     </joint>
 
     <!-- link 3 -->
@@ -113,12 +113,11 @@
       </visual>
 
       <inertial>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <mass value="1.404"/>
-        <inertia
-          ixx="1.0" ixy="0.0" ixz="0.0"
-          iyy="1.0" iyz="0.0"
-          izz="1.0"/>
+        <origin xyz="0 0 0.148" rpy="0 0 0"/>
+        <!-- <mass value="1.404"/> -->
+        <!-- <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" /> -->
+        <mass value="1.30260"/>
+        <inertia ixx="0.01111021" ixy="0.00001331" ixz="-0.00134208" iyy="0.01046642" iyz="0.00016235" izz="0.00202081" />
       </inertial>
     </link>
 
@@ -129,7 +128,7 @@
       <origin xyz="0.03 0.0 0.264" rpy="0 ${45.0*pi/180.0} 0" />
       <axis xyz="0 1 0"/>
       <limit velocity="6.5" effort="1000" lower="${-pi*0.4}" upper="${pi*0.72}" />
-      <dynamics damping="0.7"/>
+      <dynamics damping="0"/>
     </joint>
 
     <!-- link 4 -->
@@ -150,12 +149,11 @@
       </visual>
 
       <inertial>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <mass value="1.236" />
-        <inertia
-          ixx="1.0" ixy="0.0" ixz="0.0"
-          iyy="1.0" iyz="0.0"
-          izz="1.0"/>
+        <origin xyz="-0.03 0 0.1285" rpy="0 ${pi/2} 0" />
+        <!-- <mass value="1.236" /> -->
+        <!-- <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" /> -->
+        <mass value="1.15977"/>
+        <inertia ixx="0.00096726" ixy="0.00004383" ixz="-0.00002771" iyy="0.00318801" iyz="0.00000627" izz="0.00341484" />
       </inertial>
     </link>
 
@@ -166,7 +164,7 @@
       <origin xyz="-0.03 0.0 0.231" rpy="0 0 0" />
       <axis xyz="0 0 1" />
       <limit velocity="6.5" effort="1000" lower="${-pi}" upper="${pi}" />
-      <dynamics damping="0.7"/>
+      <dynamics damping="0"/>
     </joint>
 
     <!-- link 5 -->
@@ -187,12 +185,11 @@
       </visual>
 
       <inertial>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <mass value="0.491" />
-        <inertia
-          ixx="1.0" ixy="0.0" ixz="0.0"
-          iyy="1.0" iyz="0.0"
-          izz="1.0"/>
+        <origin xyz="0 0 0.024" rpy="0 0 0" />
+        <!-- <mass value="0.491" /> -->
+        <!-- <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" /> -->
+        <mass value="0.44688"/>
+        <inertia ixx="0.00030285" ixy="0.00000761" ixz="0.00000031" iyy="0.00022339" iyz="-0.00000001" izz="0.00039766" />
       </inertial>
     </link>
 
@@ -203,7 +200,7 @@
       <origin xyz="0.0 0.0 0.027" rpy="0 0 0" />
       <axis xyz="0 1 0" />
       <limit velocity="6.5" effort="1000" lower="${-pi*0.5}" upper="${pi*0.5}" />
-      <dynamics damping="0.7"/>
+      <dynamics damping="0"/>
     </joint>
 
     <!-- link 6 -->
@@ -224,12 +221,11 @@
       </visual>
 
       <inertial>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <mass value="0.454" />
-        <inertia
-          ixx="1.0" ixy="0.0" ixz="0.0"
-          iyy="1.0" iyz="0.0"
-          izz="1.0"/>
+        <origin xyz="0 0 0.081" rpy="${pi/2} ${pi/2} 0" />
+        <!-- <mass value="0.454" /> -->
+        <!-- <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" /> -->
+        <mass value="0.43273"/>
+        <inertia ixx="0.00021512" ixy="0.00001009" ixz="0.00000000" iyy="0.00042827" iyz="0.00000000" izz="0.00051436" />
       </inertial>
     </link>
 
@@ -240,7 +236,7 @@
       <origin xyz="0.0 0.0 0.123" rpy="0 0 0" />
       <axis xyz="0 0 1" />
       <limit velocity="6.5" effort="1000" lower="${-pi}" upper="${pi}" />
-      <dynamics damping="0.7"/>
+      <dynamics damping="0"/>
     </joint>
 
     <!-- End Effector -->
@@ -261,12 +257,11 @@
       </visual>
 
       <inertial>
-        <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
-        <mass value="0.001" />
-        <inertia
-          ixx="1.0" ixy="0.0" ixz="0.0"
-          iyy="1.0" iyz="0.0"
-          izz="1.0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <!-- <mass value="0.001" /> -->
+        <!-- <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" /> -->
+        <mass value="0.01919"/>
+        <inertia ixx="0.00000938" ixy="0.0" ixz="0.0" iyy="0.00000338" iyz="0.0" izz="0.00000635" />
       </inertial>
     </link>
 
