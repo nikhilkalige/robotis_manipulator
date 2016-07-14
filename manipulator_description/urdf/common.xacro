@@ -15,7 +15,7 @@
       <plugin name="${prefix_val}ros_control" filename="libfilter_gazebo_ros_control.so">
         <robotNamespace>${prefix}</robotNamespace>
         <filterJointsParam>joint_names</filterJointsParam>
-        <!--robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType-->
+        <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
       </plugin>
     </gazebo>
   </xacro:macro>
