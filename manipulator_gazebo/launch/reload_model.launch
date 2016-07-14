@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="limited" default="false"/>
+
+  <!-- send robot urdf to param server -->
+  <!-- <param name="robot_description"
+      command="$(find xacro)/xacro.py '$(find bbbot_description)/urdf/bbbot.xacro'" /> -->
+    <param name="robot_description"
+      command="$(find xacro)/xacro.py '$(find manipulator_description)/urdf/manipulator_h_arm.xacro'" />
+
+  <!-- push robot_description to factory and spawn robot in gazebo -->
+  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot -z 0.1" respawn="false" output="screen" />
+
+</launch>

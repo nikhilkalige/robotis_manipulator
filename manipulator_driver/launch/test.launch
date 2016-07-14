@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+    <include file="$(find manipulator_description)/launch/manipulator_h.launch">
+  </include>
+
+    <!-- Load controller settings -->
+    <rosparam file="$(find manipulator_driver)/config/manipulator_controllers.yaml" command="load"/>
+
+    <!-- spawn controller manager -->
+    <node name="ros_control_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+      output="screen" args="joint_state_controller" />
+
+    <!-- load other controller -->
+    <node name="ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false"
+      output="screen" args="load pos_based_pos_traj_controller" />
+
+    <!-- Convert joint states to /tf tranforms -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+  <!-- </group> -->
+
+</launch>
+
